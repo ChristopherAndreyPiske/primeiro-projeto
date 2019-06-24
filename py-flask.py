@@ -109,10 +109,8 @@ def caramb2():
 @app.route("/deletepessoa")
 def caramb3():
 
-    cpf= request.args.get("Cpf")
-    for pessoa in lista:
-        if cpf== pessoa.cpf:
-            lista.remove(pessoa)
+    saia = Pessoa.select().where(Pessoa.cpf == request.args.get("Cpf"))
+    saia[0].delete_instance()
     return render_template("mensagem.html")
 
 
@@ -123,7 +121,7 @@ def caramb3():
 def caramb4():
 
     cpf= request.args.get("Cpf")
-    for pessoa in lista:
+    for pessoa in Pessoa.select():
         if cpf== pessoa.cpf:
             return render_template("form_alterar.html", pessoa=pessoa)
 
@@ -138,12 +136,15 @@ def caramb5():
     nome= request.form["Nome"]
     idade= request.form["Idade"]
     nasci= request.form["Nascimento"]
-    cpf= request.form["Cpf"]
-    pessoa_alterada= Pessoa(nome,idade,nasci,cpf)
-    for pessoa in range(len(lista)):
-        if cpf== lista[pessoa].cpf:
-            lista[pessoa] = pessoa_alterada
-            return render_template("pessoa_alterada.html")
+
+    saia = Pessoa.select().where(Pessoa.cpf == request.form["Cpf"])
+
+    saia[0].nome=nome
+    saia[0].idade=idade
+    saia[0].nascimento=nasci
+    saia[0].save()
+    
+    return render_template("pessoa_alterada.html")
 
 app.config["SECRET_KEY"] = "54321"
 app.run(debug=True)
