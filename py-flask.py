@@ -5,22 +5,38 @@ from peewee import *
 
 db = SqliteDatabase('lista_pessoa.db')
 
-class Pessoa(Model):
-
-    nome=CharField()
-    idade=CharField()
-    nascimento=CharField()
-    cpf=CharField()
-
+class BaseModel(Model):
     class Meta:
         database=db
 
-lista=[]
+class Ingrediente(BaseModel):
+    nome= CharField()
+    valor= CharField()
+
+    def __str__(self):
+        return self.nome + ", que custa: " + self.valor
+
+class Receita(BaseModel):
+    nome= CharField()
+
+    def __str__(self):
+        return self.nome + "é feito com: "
+
+class Receita_ingrediente(BaseModel):
+    receita= ForeignKeyField(Receita)
+    ingrediente= ForeignKeyField(Ingrediente)
+    quantidade= CharField()
+
+    def __str__(self):
+        return str(receita) + str(ingrediente) + "usando: " + self.quantidade
+
+    def __str__(self):
+        return self.nome + "que custa: " + self.valor
 
 try:
         
     db.connect()
-    db.create_tables([Pessoa]) 
+    db.create_tables([Ingrediente,Receita,Receita_ingrediente]) 
 
 except OperationalError as e:
     print("erro ao criar tabelas: "+str(e))
@@ -66,9 +82,9 @@ def logout () :
 
 
 
-@app.route("/addpessoa")
+@app.route("/addingrediente")
 def caramba():
-    return render_template("adicionarpessoa.html")
+    return render_template("add_ingrediente.html")
 
 
 
