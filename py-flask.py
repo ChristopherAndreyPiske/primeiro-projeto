@@ -11,7 +11,7 @@ class BaseModel(Model):
 
 class Ingrediente(BaseModel):
     nome= CharField()
-    valor= CharField()
+    valor= FloatField()
 
     def __str__(self):
         return self.nome + ", que custa: " + self.valor
@@ -82,42 +82,64 @@ def logout () :
 
 
 
+
+
+
+@app.route("/addreceita")
+def caramba2():
+    return render_template("add_receita.html", lista_ingredientes= Ingrediente.select())
+
+
+@app.route("/lista_receita", methods=["POST"])
+def caramba3():
+
+    nome= request.form["Nome"]
+    valor= request.form["Valor"]
+    
+    val=0
+    # comparar nomes
+    while val==0:
+        for ingre in Ingrediente.select():
+            if nome == ingre.nome:
+                return render_template("erro_add_pessoa.html")
+        val=1
+        
+    Ingrediente.create(nome=nome,valor=valor)
+    return redirect( "/" )
+
+
 @app.route("/addingrediente")
 def caramba():
     return render_template("add_ingrediente.html")
 
 
-
-
-
-@app.route("/listapessoa_sem_add")
-def caramb1():
-
-    return render_template("listarpessoa.html", So_cara_foda= Pessoa.select())
-
-
-
-
-
-
-@app.route("/listapessoa", methods=["POST"])
+@app.route("/lista_ingre", methods=["POST"])
 def caramb2():
 
     nome= request.form["Nome"]
-    idade= request.form["Idade"]
-    nasci= request.form["Nascimento"]
-    cpf= request.form["Cpf"]
+    valor= request.form["Valor"]
+    
     val=0
-    # comparar cpfs
+    # comparar nomes
     while val==0:
-        for pessoa in lista:
-            if cpf == pessoa.cpf:
+        for ingre in Ingrediente.select():
+            if nome == ingre.nome:
                 return render_template("erro_add_pessoa.html")
         val=1
         
-    Pessoa.create(nome=nome,idade=idade,nascimento=nasci,cpf=cpf)
-    return redirect( "/listapessoa_sem_add" )
+    Ingrediente.create(nome=nome,valor=valor)
+    return redirect( "/" )
 
+
+
+
+
+
+
+@app.route("/lista_sem_add")
+def caramb1():
+
+    return render_template("listarpessoa.html", So_cara_foda= Pessoa.select())
 
 
 

@@ -23,12 +23,19 @@
         </p>
         {% endif %}
         <br></br>
-        <p><b>Salvar Ingrediente</b></p>
+        <p><b>Salvar Receita</b></p>
         <br></br>
-        <form action= "/lista_ingre" method= post>
+        <form action= "/lista_receita" method= post>
         <p>Nome: <input type="text" name="Nome"></input></p>
-        <p>Valor: <input type="text" name="Valor"></p>
-        
+        <p>Ingredientes: 
+        <select name="Ingre">
+            {% for ingre in lista_ingredientes: %}
+            <option value= {{ingre.nome}}> </option>
+            {% endfor %}
+        </select> 
+            
+            </p>
+        <p>Quantidade: <input type="text" name="Quant"></p>
         <br></br>
         <input type="submit" value="enviar"/>
         </form>
