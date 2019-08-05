@@ -30,7 +30,7 @@
         <p>Ingredientes: 
         <select name="Ingre">
             {% for ingre in lista_ingredientes: %}
-            <option value= {{ingre.nome}}> </option>
+            <option value={{ingre.id}}> {{ingre.nome}} </option>
             {% endfor %}
         </select> 
             

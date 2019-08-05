@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>listpessoa</title>
+    <style>
+    body{
+        background-color: #C0C0C0;
+        }
+    </style>
+    </head>
+    <body>
+        {% if session["usuario"]%}
+        <p>
+        <form action="/logout">
+        <input type="submit" value="LOGOUT">
+        </form>
+        </p>
+        {% else %}
+        <p>
+        <form action="/login_form" >
+        <input type="submit" value="LOGIN">
+        </form>
+        </p>
+        {% endif %}
+        <br></br>
+        <h1><b>Lista de receitas: </b></h1>
+        <br></br>
+        {% for receita in receitas: %}
+
+        <p>Nome: {{receita.nome}}</p>
+        <form action="/excluir receita">
+        <input type="submit" value="excluir receita">
+        <input type="hidden" name="excluir receita" value={{receita.nome}}>
+        </form>
+        <p>Ingredientes:</p>
+
+        {% for ingrediente_receita in receita_ingredientes %}
+
+        {% if ingrediente_receita.receita.nome == receita.nome %}
+        
+        <p>{{ingrediente_receita.ingrediente.nome}}</p>
+
+        {% endif %}
+        {% endfor %}
+        <br>
+        <br>
+        {% endfor %}
+        
+        <br></br>
+        <form action="/"><input type="submit" value="voltar ao inicio"/></form>
+    </body> 
+</html>

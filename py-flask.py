@@ -94,17 +94,18 @@ def caramba2():
 def caramba3():
 
     nome= request.form["Nome"]
-    valor= request.form["Valor"]
+    ingrediente= request.form["Ingre"]
+    quantidade= request.form["Quant"]
     
     val=0
     # comparar nomes
     while val==0:
-        for ingre in Ingrediente.select():
+        for ingre in Receita.select():
             if nome == ingre.nome:
                 return render_template("erro_add_pessoa.html")
         val=1
-        
-    Ingrediente.create(nome=nome,valor=valor)
+    val=Receita.create(nome=nome)
+    Receita_ingrediente.create(receita=val, ingrediente=Ingrediente.get_by_id(ingrediente), quantidade=quantidade)
     return redirect( "/" )
 
 
@@ -136,18 +137,22 @@ def caramb2():
 
 
 
-@app.route("/lista_sem_add")
+@app.route("/lista_de_receitas")
 def caramb1():
 
-    return render_template("listarpessoa.html", So_cara_foda= Pessoa.select())
+    return render_template("lista_receitas.html",receitas= Receita.select(),receita_ingredientes= Receita_ingrediente.select())
 
 
 
 
-@app.route("/deletepessoa")
+@app.route("/excluir receita")
 def caramb3():
 
-    saia = Pessoa.select().where(Pessoa.cpf == request.args.get("Cpf"))
+    nome = request.args.get("excluir receita")
+    saia = Receita.select().where(Receita.nome == nome)
+    saia_= Receita_ingrediente.select().where(Receita_ingrediente.receita == saia)
+    for i in saia_:
+        i.delete_instance()
     saia[0].delete_instance()
     return render_template("mensagem.html")
 
